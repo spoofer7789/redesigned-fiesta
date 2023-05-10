@@ -1,0 +1,14 @@
+[package]
+name = "Wordio"
+version = "0.0.1"
+
+[build]
+target = "index.html"
+
+[[proxy]]
+rewrite = "/backend"
+backend = "http://localhost:3000"
+
+ [[proxy]]
+ rewrite = "/web3"
+ backend = "http://localhost:3001"

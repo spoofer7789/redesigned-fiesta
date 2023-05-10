@@ -2,7 +2,11 @@
 # will have compiled files and executables
 debug/
 target/
-
+backend/target/
+frontend/target/
+frontend/dist/
+frontend/Cargo.lock
+backend/Cargo.lock
 # Remove Cargo.lock from gitignore if creating an executable, leave it for libraries
 # More information here https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html
 Cargo.lock
@@ -12,3 +16,12 @@ Cargo.lock
 
 # MSVC Windows builds of rustc generate these, which store debugging information
 *.pdb
+node_services/node_modules
+node_services/orbitdb
+node_services/package-lock.json
+node_services/ipfs
+
+/backend/src/utils/wallet_gen/target
+
+
+/backend/src/utils/wallet_gen/Cargo.lock
