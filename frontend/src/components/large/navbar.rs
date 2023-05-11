@@ -56,24 +56,15 @@ pub fn Navbar() -> Html {
             {createaccount}
         </div>
     };
+    let user_context = use_context::<Option<Rc<UserContext>>>().unwrap();
 
-    html! {
-        <nav class="navbar">
-            <div class="navbar-menu">
-                <div class="navbar-start">
-                     {
-                         if let Some(context) = user_context.as_ref() {
-                             if context.is_logged_in {
-                                 loggedin_navbar
-                             } else {
-                                 logged_out_navbar
-                             }
-                         } else {
-                             logged_out_navbar
-                         }
-                     } 
-                </div>
-            </div>
-        </nav>
+    if let Some(user_context) = user_context.as_ref() {
+        if user_context.is_logged_in return html! {
+            <>
+            {loggedin_navbar}
+            </>
+    }
+
+        html!{<> {logged_out_navbar}</>}
     }
 }

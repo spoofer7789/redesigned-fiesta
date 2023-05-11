@@ -1,7 +1,5 @@
 # redesigned-eureka
 - [x] Take in the address from metamask.
-    - [] master the state and have it generate UserData on the frontend
-
 - [] Create the ducking navbar.
     - [] contextnav
     - [] searchbar
@@ -12,7 +10,11 @@
     - [] profile generation
         - [] display on the frontend.
         - [] convert them over to wasm.
-    - [] websocket
+    - [x] websocket
+        - [] yewdux.
+            - [] display shit
+            - [] encryption
+            - [] nesting.
     - [] upgrade security.
     - [x] handle create account request
         - [x] If the username or email is taken, return an error.

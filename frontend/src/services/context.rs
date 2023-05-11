@@ -1,6 +1,9 @@
 use yew::prelude::*;
 use std::rc::Rc;
 use crate::services::auth;
+use yewdux::prelude::*;
+
+#[derive(Store, Default, PartialEq, Clone)]
 
 pub struct UserContext {
     pub jwt_token: Option<String>,

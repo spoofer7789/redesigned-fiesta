@@ -31,6 +31,7 @@ gloo-net = "0.2.6"
 js-sys = "0.3.61"
 futures = "0.3.28"
 yewdux = "0.9.2"
+yewtil = "0.4.0"
 
 [dependencies.web-sys]
 version = "0.3.61"

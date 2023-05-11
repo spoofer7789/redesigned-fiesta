@@ -1,38 +1,55 @@
-
-use yew::prelude::*;
+use reqwasm::http::Request;
+use serde::Deserialize;
+use crate::services::auth::get_jwt_token;
+use web_sys::{WebSocket, MessageEvent};
+use wasm_bindgen::{closure::Closure, JsCast};
+use js_sys;
+use std::rc::Rc;
+use std::cell::RefCell;
 use yewdux::prelude::*;
-use crate::state::{Store, Action};
-use crate::services::header::fetch_user_data;
+//should work as both a models and resthelper.
 
-#[function_component(Settings)]
-pub fn settings() -> Html {
-    let dispatch: Dispatch<Store> = use_dispatch();
 
-    use_effect_with_deps(
-        move |_| {
-            let dispatch = dispatch.clone();
-            let future = async move {
-                let username = fetch_user_data("username").await;
-                dispatch.send(Action::SetUserData(UserData { username }));
-            };
-            wasm_bindgen_futures::spawn_local(future);
-            || ()
-        },
-        (),
-    );
 
-    let user_data = use_state(|| dispatch.state().user_data.clone());
 
-    html! {
-        <>
-            <h1>{"User Settings"}</h1>
-            {
-                if let Some(user_data) = &*user_data {
-                    html! { <h2>{ format!("{:?}", user_data.username) }</h2> }
-                } else {
-                    html! {}
-                }
+pub async fn fetch_user_data(data_type: &str) -> String {
+    let ws = WebSocket::new("ws://localhost:3000/backend/ws/").unwrap();
+    let (tx, rx) = futures::channel::oneshot::channel::<String>();
+    let tx = Rc::new(RefCell::new(Some(tx)));
+
+    let onmessage_callback = Closure::wrap(Box::new(move |event: MessageEvent| {
+        if let Ok(data) = event.data().dyn_into::<js_sys::JsString>() {
+            let response = data.as_string().unwrap();
+            if let Some(tx) = tx.borrow_mut().take() {
+                tx.send(response).expect("Failed to send data");
             }
-        </>
-    }
+        }
+    }) as Box<dyn FnMut(MessageEvent)>);
+
+    ws.set_onmessage(Some(onmessage_callback.as_ref().unchecked_ref()));
+    onmessage_callback.forget();
+
+    ws.send_with_str(data_type).unwrap();
+    rx.await.expect("Failed to receive data")
 }
+
+//      popular/trending//      take username    
+//      wallets
+//          wallet type should take in the amounts and addresses.
+//              Ring CT
+//                  
+//              Standard
+//                  BTC Doge
+//              smart contractbased.
+//      contracts
+//      notifications    
+//          interactions       
+//          liked
+//          following you
+//          commented.
+//          request dm
+//          bought / sent.
+//     feeds, 
+//      interests.
+//      subscriptions
+

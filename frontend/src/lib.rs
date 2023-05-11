@@ -7,12 +7,16 @@ use crate::components::medium::login::Loginform;
 use yew::prelude::*;
 use routes::router::Browserfunc;
 use crate::services::auth;
-use yew::context::ContextProvider;
+use std::rc::Rc;
+use crate::services::context::{get_user_context, UserContext};
 #[function_component]
 pub fn App() -> Html {
+  let user_context = use_state(|| get_user_context());
     html! {
       <>
+      <UserContextProvider value={(*user_context).clone()}>
             <Browserfunc />
+            </UserContextProvider>
       </>
     }
 }

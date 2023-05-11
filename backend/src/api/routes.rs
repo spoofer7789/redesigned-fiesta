@@ -1,21 +1,19 @@
-use actix::{Actor, StreamHandler, ActorContext};
-use actix_web::{web::Payload, HttpResponse, get, HttpRequest, web, HttpServer};
-use actix_web::middleware::Condition;
-use actix_web_actors::ws;
-use log;
+use crate::controllers::changesettings::get_user;
+use crate::models::db::register_user;
 use crate::models::db::UserData;
 use crate::models::login::login_user;
-use crate::controllers::changesettings::{get_user};
-use crate::models::db::register_user;
 use crate::utils::ipfssync::web3_login;
+use actix::{Actor, ActorContext, StreamHandler};
+use actix_web::middleware::Condition;
+use actix_web::{get, web, web::Payload, HttpRequest, HttpResponse, HttpServer};
+use actix_web_actors::ws;
+use log;
 pub fn config(cfg: &mut web::ServiceConfig) {
     cfg.service(
-        web::scope("/users")
-            .route("/{username}", web::get().to(get_user)) // GET /users/{username}
-          //  .route("/login", web::post().to(login_user))
-           // .route("/register", web::post().to(register_user)) // POST /users/register
-          //  .route("/web3_login", web::post().to(web3_login))
-            
+        web::scope("/users").route("/{username}", web::get().to(get_user)), // GET /users/{username}
+                                                                            //  .route("/login", web::post().to(login_user))
+                                                                            // .route("/register", web::post().to(register_user)) // POST /users/register
+                                                                            //  .route("/web3_login", web::post().to(web3_login))
     );
 }
 pub struct MyWebSocket {
@@ -40,11 +38,9 @@ impl MyWebSocket {
         }
     }
 }
-
 impl Actor for MyWebSocket {
     type Context = ws::WebsocketContext<Self>;
 }
-
 impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MyWebSocket {
     fn handle(&mut self, msg: Result<ws::Message, ws::ProtocolError>, ctx: &mut Self::Context) {
         match msg {
@@ -66,7 +62,6 @@ impl StreamHandler<Result<ws::Message, ws::ProtocolError>> for MyWebSocket {
         }
     }
 }
-
 #[get("/ws/")]
 pub async fn ws_index(req: HttpRequest, stream: Payload) -> HttpResponse {
     let user_data = UserData::new(
@@ -82,19 +77,4 @@ pub async fn ws_index(req: HttpRequest, stream: Payload) -> HttpResponse {
             HttpResponse::InternalServerError().finish()
         }
     }
-}
-
-
-fn extract_tags(text: &str) -> (Vec<String>, Vec<String>) {
-    let mut hashtags = Vec::new();
-    let mut cashtags = Vec::new();
-
-    for token in text.split_whitespace() {
-        if token.starts_with('#') {
-            hashtags.push(token[1..].to_string());
-        } else if token.starts_with('$') {
-            cashtags.push(token[1..].to_string());
-        }
-    }
-    (hashtags, cashtags)
 }
