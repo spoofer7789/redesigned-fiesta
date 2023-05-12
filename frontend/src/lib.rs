@@ -16,7 +16,7 @@ pub fn App() -> Html {
       <>
       <UserContextProvider value={(*user_context).clone()}>
             <Browserfunc />
-            </UserContextProvider>
+      </UserContextProvider>
       </>
     }
 }

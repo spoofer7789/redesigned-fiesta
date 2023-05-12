@@ -59,12 +59,12 @@ pub fn Navbar() -> Html {
     let user_context = use_context::<Option<Rc<UserContext>>>().unwrap();
 
     if let Some(user_context) = user_context.as_ref() {
-        if user_context.is_logged_in return html! {
-            <>
+      return   html! {
+             <>
             {loggedin_navbar}
             </>
-    }
+    };
 
-        html!{<> {logged_out_navbar}</>}
-    }
+        
+    }html!{<> {logged_out_navbar}</>}
 }

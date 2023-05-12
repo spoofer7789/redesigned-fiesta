@@ -42,35 +42,6 @@ async fn main() -> io::Result<()> {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // mod api;
 // mod controllers;
 // mod utils;
@@ -82,7 +53,6 @@ async fn main() -> io::Result<()> {
 // use std::sync::Mutex;
 // use controllers::routes::add_user;
 // use api::state::AppState;
-
 
 // #[actix_web::main]
 // async fn main() -> std::io::Result<()> {
