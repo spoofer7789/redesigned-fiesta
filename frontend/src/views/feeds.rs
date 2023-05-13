@@ -94,3 +94,58 @@
 //         }
 //     }
 // }
+// use yew::prelude::*;
+// use yew::function_component;
+// use yew::hooks::use_state;
+// use yew::services::fetch::FetchTask;
+// use yew::services::FetchService;
+// use anyhow::Error;
+// use serde::Deserialize;
+
+// #[derive(Deserialize, Debug, Clone)]
+// pub struct FileData {
+//     pub id: i32,
+//     pub name: String,
+//     // Add more fields as needed
+// }
+
+// #[function_component(FileList)]
+// pub fn file_list() -> Html {
+//     let (files, set_files) = use_state(Vec::new);
+//     let (fetch_task, set_fetch_task) = use_state(|| None);
+
+//     let fetch_files = {
+//         let set_files = set_files.clone();
+//         let set_fetch_task = set_fetch_task.clone();
+
+//         Callback::once(move |_| {
+//             let request = Request::get("https://example.com/api/files")
+//                 .body(yew::format::Nothing)
+//                 .expect("Could not build request.");
+
+//             let callback = {
+//                 let set_files = set_files.clone();
+
+//                 Callback::once(move |response: Response<Json<Result<Vec<FileData>, Error>>>| {
+//                     let Json(files) = response.into_body();
+//                     if let Ok(files) = files {
+//                         set_files(files);
+//                     }
+//                 })
+//             };
+
+//             let task = FetchService::fetch(request, callback).expect("Failed to start request");
+//             set_fetch_task(Some(task));
+//         })
+//     };
+
+//     on_mount(move || {
+//         fetch_files.emit(());
+//     });
+
+//     html! {
+//         <>
+//             { for files.iter().map(|file| html! { <p>{ &file.name }</p> }) }
+//         </>
+//     }
+// }

@@ -2,8 +2,8 @@ use yew::prelude::*;
 use yew_router::{prelude::use_navigator, navigator};
 use crate::routes::{*, router::MainRoute, search::SearchRoute};
 use crate::services::header::fetch_user_data;
-use crate::services::context::get_user_context;
 use std::rc::Rc;
+use crate::services::context::UserContext;
 
 #[function_component]
 pub fn Navbar() -> Html {
@@ -57,14 +57,11 @@ pub fn Navbar() -> Html {
         </div>
     };
     let user_context = use_context::<Option<Rc<UserContext>>>().unwrap();
-
-    if let Some(user_context) = user_context.as_ref() {
-      return   html! {
-             <>
+    html!{
+    if let Some(user_context) = user_context.as_ref()   {
             {loggedin_navbar}
-            </>
-    };
-
-        
-    }html!{<> {logged_out_navbar}</>}
-}
+            } else {
+        {logged_out_navbar}
+        }
+    }
+    }

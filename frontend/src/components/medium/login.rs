@@ -9,7 +9,8 @@ use web_sys::HtmlInputElement;
 use serde::Serialize;
 use reqwasm::http::Request;
 use wasm_bindgen_futures::*;
-use crate::services::context::{get_user_context, update_user_context};
+use crate::main::{get_user_context, UserContext};
+
 
 // Inside login function
 #[derive(Debug, Serialize)]
