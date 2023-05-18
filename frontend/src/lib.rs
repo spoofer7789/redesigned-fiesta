@@ -1,18 +1,9 @@
-mod components;
-mod routes;
-mod views;
-mod services;
-use yew::prelude::*;
-use routes::router::Browserfunc;
-use crate::services::auth;
-use std::rc::Rc;
+#![allow(clippy::unused_unit)]
 
-
-#[function_component]
-pub fn App() -> Html {
-    html! {
-      <>
-            <Browserfunc />
-      </>
-    }
-}
+pub mod app;
+pub mod components;
+pub mod error;
+pub mod hooks;
+pub mod routes;
+pub mod services;
+pub mod types;

@@ -1,32 +1,18 @@
-// use frontend::App;
-// use yewdux::prelude::*;
+// Fix for now: https://github.com/rustwasm/wasm-bindgen/issues/2774
+#![allow(clippy::unused_unit)]
 
-// fn main() {
-//     yew::Renderer::<App>::new().render();
-//     wasm_logger::init(wasm_logger::Config::default());
+use wasm_bindgen::prelude::*;
 
-// }
-use frontend::App;
-use yew::prelude::*;
-use yewdux::prelude::*;
-use wasm_logger::init;
-use wasm_logger::Config;
-use crate::services::context::UserContext;
+use frontend::app::App;
 
+// Use `std::alloc` as the global allocator.
+#[global_allocator]
+static ALLOC: std::alloc::System = std::alloc::System;
 
-fn main() {
-    yew::initialize();
-    init(Config::default());
-    
-    let context = UserContext {
-        jwt_token: None,
-        is_logged_in: false,
-    };
-    
-    let store = BasicStore::new(context);
-    let app: App<BasicStore<UserContext>> = App::new(store);
-    yew::start_app_in_element::<StoreProvider<BasicStore<UserContext>>>(
-        yew::utils::document().get_element_by_id("app").unwrap(),
-        app,
-    );
+// This is the entry point for the web app
+//#[wasm_bindgen]
+ pub fn main() /*-> Result<(), JsValue> */ {
+    wasm_logger::init(wasm_logger::Config::default());
+    yew::Renderer::<App>::new().render();
+ //   Ok(())
 }

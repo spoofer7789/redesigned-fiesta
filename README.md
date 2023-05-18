@@ -1,4 +1,8 @@
-# redesigned-eureka
+<!-- # redesigned-eureka
+
+
+
+
 - [x] Take in the address from metamask.
 - [] Create the ducking navbar.
     - [] contextnav
@@ -26,4 +30,8 @@
         - [] Bitcoin
         - [x] mongo will hold private keys. & emails.
 - [] Proection from DDOS.
-- []
+- [] -->
+
+
+- [] new routes
+- [] node and frontend on same server.

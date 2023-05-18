@@ -1,23 +1,24 @@
-use web_sys::{Storage, window};
-use reqwasm::http::Request;
-use serde::Deserialize;
-use std::rc::Rc;
-use yew::prelude::*;
-pub const JWT_STORAGE_KEY: &str = "jwt_token";
-pub fn save_jwt_token(token: String) {
-    if let Some(window) = window() {
-        if let Ok(Some(storage)) = window.local_storage() {
-            let _ = storage.set_item(JWT_STORAGE_KEY, &token);
-            //Set UserContext to true.
-        }
-    }
-}
-pub fn get_jwt_token() -> Option<String> {
-    if let Some(window) = window() {
-        if let Ok(Some(storage)) = window.local_storage() {
-            return storage.get_item(JWT_STORAGE_KEY).ok().flatten();
-        }
-    }
-    None
+use super::{request_get, request_post, request_put};
+use crate::error::Error;
+use crate::types::*;
+
+/// Get current user info
+pub async fn current() -> Result<UserInfoWrapper, Error> {
+    request_get::<UserInfoWrapper>("/backend/user".to_string()).await
 }
 
+/// Login a user
+pub async fn login(login_info: LoginInfoWrapper) -> Result<UserInfoWrapper, Error> {
+    request_post::<LoginInfoWrapper, UserInfoWrapper>("/backend/users/login".to_string(), login_info).await
+}
+
+/// Register a new user
+pub async fn register(register_info: RegisterInfoWrapper) -> Result<UserInfoWrapper, Error> {
+    request_post::<RegisterInfoWrapper, UserInfoWrapper>("/backend/users".to_string(), register_info).await
+}
+
+/// Save info of current user
+pub async fn save(user_update_info: UserUpdateInfoWrapper) -> Result<UserInfoWrapper, Error> {
+    request_put::<UserUpdateInfoWrapper, UserInfoWrapper>("/backend/user".to_string(), user_update_info)
+        .await
+}
