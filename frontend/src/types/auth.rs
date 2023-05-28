@@ -21,7 +21,6 @@ pub struct RegisterInfo {
     pub password: String,
 }
 
-
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct RegisterInfoWrapper {
@@ -59,6 +58,7 @@ pub struct UserUpdateInfo {
     pub image: String,
     pub bio: String,
 }
+
 #[derive(Serialize, Deserialize, Clone, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct UserUpdateInfoWrapper {

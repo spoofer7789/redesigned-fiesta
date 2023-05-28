@@ -1,6 +1,6 @@
 use actix_web::{post, web, HttpResponse,  Responder, middleware, HttpRequest};
 use jsonwebtoken::{encode, EncodingKey, Header};
-use mongodb::{options::ClientOptions, Client};
+use mongodb::{options::ClientOptions, Client, Database};
 use serde::{Deserialize, Serialize};
 use bson::{doc, Document};
 use reqwest;
@@ -8,7 +8,7 @@ use wallet_gen::generate_zcash_wallet;
 use super::posts::Post;
 
 #[derive(Debug,Deserialize, Serialize)]
- pub struct UserData {
+ pub struct UserData { // RegisterInfo
     email: String,
    pub(crate) username: String,
     pub password: String,
@@ -26,10 +26,25 @@ use super::posts::Post;
     contracts: Vec<WalletType>,
 }
 
-#[post("/register")]
-pub async fn register_user(
+#[derive(Debug, Deserialize, Serialize)]
+pub struct Claims {
+    pub sub: String,
+    exp: usize,
+}
+
+pub fn create_jwt_token(username: &str) -> String {
+    let claims = Claims {
+        sub: username.to_owned(),
+        exp: (chrono::Utc::now() + chrono::Duration::hours(24)).timestamp() as usize,
+    };
+
+    let encoding_key = EncodingKey::from_secret("secret_key".as_ref());
+    encode(&Header::default(), &claims, &encoding_key).unwrap()
+}
+
+#[post("/register")]pub async fn register_user(
     data: web::Json<UserData>,
-    db: web::Data<mongodb::Database>,
+    db: web::Data<Database>,
 ) -> impl Responder {
     let users_collection = db.collection("users");
 
@@ -48,6 +63,7 @@ pub async fn register_user(
     if email_taken || username_taken {
         return HttpResponse::BadRequest().body("Email or username has been taken.");
     }
+
     // Generate a Zcash wallet for the user
     let (zcash_spending_key, zcash_address) = generate_zcash_wallet();
     // Include the Zcash wallet in the user data using the WalletType enum
@@ -62,7 +78,6 @@ pub async fn register_user(
     let result = users_collection
         .insert_one(user_data, None)
         .await;
-
     match result {
         Ok(_) => HttpResponse::Ok().body("User registered."),
         Err(_) => HttpResponse::InternalServerError().body("Error registering user."),

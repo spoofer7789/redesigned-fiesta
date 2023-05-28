@@ -1,8 +1,11 @@
-
-use actix_web::{ App, HttpServer, middleware};
+use actix_web::{ App, web,HttpServer, middleware, HttpResponse, Responder};
 use actix_web::web::Data;
 use jsonwebtoken::{encode, EncodingKey, Header};
-use mongodb::{options::ClientOptions, Client};
+use mongodb::{options::ClientOptions, Client, Database};
+use bson::{doc, Document};
+use serde::{Deserialize, Serialize};
+
+
 use std::io;
 use env_logger;
 mod api;
@@ -38,10 +41,6 @@ async fn main() -> io::Result<()> {
     .run()
     .await
 }
-
-
-
-
 // mod api;
 // mod controllers;
 // mod utils;

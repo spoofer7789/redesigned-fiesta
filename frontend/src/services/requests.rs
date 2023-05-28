@@ -1,4 +1,4 @@
-
+use dotenv_codegen::dotenv;
 use gloo::storage::{LocalStorage, Storage};
 use lazy_static::lazy_static;
 use parking_lot::RwLock;
@@ -7,7 +7,7 @@ use serde::{de::DeserializeOwned, Serialize};
 use crate::error::Error;
 use crate::types::ErrorInfo;
 
-const API_ROOT: &str = "http://localhost:3000";
+const API_ROOT: &str = dotenv!("API_ROOT");
 const TOKEN_KEY: &str = "yew.token";
 
 lazy_static! {

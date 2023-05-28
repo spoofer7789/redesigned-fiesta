@@ -44,6 +44,7 @@ pub enum AppRoute {
     #[at("/404")]
     NotFound,
 }
+
 pub fn switch(route: AppRoute) -> Html {
     match route {
         AppRoute::Login => html! {<Login />},
