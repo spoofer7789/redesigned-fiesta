@@ -1,0 +1,16 @@
+[package]
+name = "MercuriousIO"
+version = "0.0.1"
+
+[build]
+target = "index.html"
+
+[[proxy]]
+rewrite = "backend"
+backend = "http://localhost:3000"
+
+  [[proxy]]
+  rewrite = "/web3"
+  backend = "http://localhost:3001"
+# app will use Rust for file storage and orbitdb for smaller data relating to web3
+# as main server and

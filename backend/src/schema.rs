@@ -1,3 +1,5 @@
+// @generated automatically by Diesel CLI.
+
 table! {
     articles (id) {
         id -> Uuid,

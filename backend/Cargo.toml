@@ -15,7 +15,7 @@ blob-uuid = "0.5.0"
 chrono = "0.4.6"
 diesel = { version = "2.0.2", features = ["chrono", "postgres", "r2d2", "uuid", "serde_json"] }
 dotenv = "0.15.0"
-env_logger = "0.9.3"
+env_logger = "0.10.0"
 failure = "0.1.5"
 futures = "0.3.25"
 http = "0.2.8"

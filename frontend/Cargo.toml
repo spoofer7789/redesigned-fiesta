@@ -4,7 +4,7 @@ categories = ["wasm"]
 description = "Exemplary real world app built with Rust + Yew + WebAssembly."
 edition = "2021"
 license = "Apache-2.0/MIT"
-name = "conduit-wasm"
+name = "frontend"
 repository = "https://github.com/jetli/rust-yew-realworld-example-app.git"
 version = "0.1.0"
 
@@ -15,7 +15,6 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 chrono = { version = "0.4", features = ["serde"] }
-dotenv_codegen = "0.15.0"
 gloo = "0.8"
 lazy_static = "1.4.0"
 log = "0.4"
@@ -29,6 +28,9 @@ yew-router = "0.17.0"
 yew-hooks = "0.2.0"
 wasm-bindgen = "0.2"
 wasm-logger = "0.2"
+reqwasm = "0.5.0"
+web3 = { git = "https://github.com/monomadic/rust-web3", default-features = false, features = ["http-rustls-tls", "wasm", "eip-1193"] }
+yew-ethereum-provider = { git = "https://github.com/monomadic/yew-ethereum-provider" }
 
 [dependencies.web-sys]
 version = "0.3"
