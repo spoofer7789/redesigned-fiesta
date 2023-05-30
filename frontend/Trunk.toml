@@ -6,7 +6,7 @@ version = "0.0.1"
 target = "index.html"
 
 [[proxy]]
-rewrite = "backend"
+rewrite = "/backend"
 backend = "http://localhost:3000"
 
   [[proxy]]

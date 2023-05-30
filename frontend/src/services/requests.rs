@@ -7,7 +7,7 @@ use serde::{de::DeserializeOwned, Serialize};
 use crate::error::Error;
 use crate::types::ErrorInfo;
 
-const API_ROOT: &str = "backend/api";
+const API_ROOT: &str = "/backend/api";
 const TOKEN_KEY: &str = "yew.token";
 
 lazy_static! {
