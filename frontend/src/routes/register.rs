@@ -10,7 +10,7 @@ use crate::routes::AppRoute;
 use crate::services::auth::*;
 use crate::types::{RegisterInfo, RegisterInfoWrapper};
 
-/// Register page
+// Register page
 #[function_component(Register)]
 pub fn register_page() -> Html {
     let user_ctx = use_user_context();

@@ -6,6 +6,9 @@ use thiserror::Error as ThisError;
 /// Define all possible errors
 #[derive(ThisError, Clone, Debug, PartialEq, Eq)]
 pub enum Error {
+    #[error("Unknown HTTP Method")]
+    UnknownMethod,
+
     /// 401
     #[error("Unauthorized")]
     Unauthorized,

@@ -3,6 +3,7 @@ use crate::error::Error;
 use crate::types::*;
 
 /// Get current user info
+/// Get current user info
 pub async fn current() -> Result<UserInfoWrapper, Error> {
     request_get::<UserInfoWrapper>("/user".to_string()).await
 }
