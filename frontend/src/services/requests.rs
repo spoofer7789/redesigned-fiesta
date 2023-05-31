@@ -7,7 +7,7 @@ use reqwasm::http::{Request, Method, Response};
 use crate::error::Error;
 use crate::types::ErrorInfo;
 
- const API_ROOT: &str = "/backend/api";
+ const API_ROOT: &str = "/backend";
  const TOKEN_KEY: &str = "yew.token";
 
 lazy_static! {
