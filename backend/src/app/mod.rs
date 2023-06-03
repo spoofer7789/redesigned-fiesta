@@ -41,12 +41,10 @@ pub async fn start() -> std::io::Result<()> {
         let cors = match frontend_origin {
             Some(ref origin) => Cors::default()
                 .allowed_origin(origin)
-                .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
                 .allowed_headers(vec![AUTHORIZATION, CONTENT_TYPE])
                 .max_age(3600),
             None => Cors::default()
                 .send_wildcard()
-                .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
                 .allowed_headers(vec![AUTHORIZATION, CONTENT_TYPE])
                 .max_age(3600),
         };

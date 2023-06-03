@@ -7,7 +7,7 @@ pub mod login;
 pub mod profile;
 pub mod register;
 pub mod settings;
-
+pub mod testing;
 use yew::prelude::*;
 use yew_router::prelude::*;
 
@@ -18,10 +18,12 @@ use login::Login;
 use profile::{Profile, ProfileTab};
 use register::Register;
 use settings::Settings;
-
+use testing::Testpage;
 /// App routes
 #[derive(Routable, Debug, Clone, PartialEq, Eq)]
 pub enum AppRoute {
+    #[at("/testing")]
+    Testing,
     #[at("/login")]
     Login,
     #[at("/register")]
@@ -48,17 +50,19 @@ pub fn switch(route: AppRoute) -> Html {
     match route {
         AppRoute::Login => html! {<Login />},
         AppRoute::Register => html! {<Register />},
+        AppRoute::Testing => html! {<Testpage/>},
         AppRoute::Home => html! {<Home />},
         AppRoute::Editor { slug } => html! {<Editor slug={Some(slug)}/>},
         AppRoute::EditorCreate => html! {<Editor />},
         AppRoute::Article { slug } => html! {<Article slug={slug} />},
         AppRoute::Settings => html! {<Settings />},
+
         AppRoute::ProfileFavorites { username } => html! {
             <Profile username={username} tab={ProfileTab::FavoritedBy} />
         },
         AppRoute::Profile { username } => html! {
             <Profile username={username} tab={ProfileTab::ByAuthor} />
         },
-        AppRoute::NotFound => html! { "Page not found" },
+        AppRoute::NotFound => html! { <h1>{"Page not found"}</h1> },
     }
 }

@@ -1,0 +1,117 @@
+.navbar ul li {
+  list-style-type: none;
+  margin: 0;
+  padding: 0 10px;
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.navbar ul li a {
+  color: rgb(7, 115, 209);
+  text-decoration: none;
+}
+
+.navbar {
+  color: whitesmoke;
+  height: 20%;
+  min-height: 50px !important;
+}
+
+.navbar-brand {
+  font-size: 28px;
+  font-weight: bolder;
+  margin: 0;
+  color: rgb(95, 158, 190) ;
+  color-scheme: dark;
+  text-decoration: none;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+@media screen and (min-width: 768px) {
+  .navbar ul li {
+      padding: 0 15px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .navbar ul li {
+      padding: 0 20px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .navbar ul li {
+      padding: 0 50px;
+  }
+}
+
+.navbar ul li a:hover {
+  text-decoration: none;
+}
+.navbar-toggler {
+  display: none;
+}
+
+.navbar-collapse {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media screen and (max-width: 550px) {
+  .navbar-nav {
+      display: none;
+  }
+  .navbar-toggler {
+      display: block;
+  }
+  .navbar-collapse {
+      display: none;
+  }
+  .navbar-collapse.show {
+      display: flex;
+  }
+}
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.auth-page form {
+  max-width: 500px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.auth-page .btn-primary {
+  background-color: #5a69db;
+  border: none;
+}
+
+.auth-page .btn-primary:hover {
+  background-color: #4a59cb;
+}
+.disconnected {
+  font-weight: bolder;
+  border-radius: 20px;
+  background-color: rgb(7, 115, 235);
+  max-width: 250px;
+  min-width: 150px;
+  min-height: 25px;
+  text-align: center;
+  background-image: url("metamask.svg");
+  background-size: contain; /* Adjust the background size as needed */
+  background-repeat: no-repeat;
+}

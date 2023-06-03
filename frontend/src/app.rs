@@ -16,7 +16,7 @@ pub fn app() -> Html {
             <UserContextProvider>
                 <Header />
                 <Switch<AppRoute> render={switch} />
-                <Footer />
+                <Footer />                 
             </UserContextProvider>
         </HashRouter>
     }

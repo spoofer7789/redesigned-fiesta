@@ -9,7 +9,7 @@ use crate::hooks::use_user_context;
 use crate::routes::AppRoute;
 use crate::services::auth::*;
 use crate::types::{LoginInfo, LoginInfoWrapper};
-
+use crate::components::web3::Web3Login;
 /// Login page
 #[function_component(Login)]
 pub fn login_page() -> Html {
@@ -71,6 +71,8 @@ pub fn login_page() -> Html {
                             <Link<AppRoute> to={AppRoute::Register}>
                                 { "Need an account?" }
                             </Link<AppRoute>>
+                  //      <Web3Login/>
+                            
                         </p>
                         <ListErrors error={user_login.error.clone()} />
                         <form {onsubmit}>

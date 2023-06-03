@@ -30,9 +30,9 @@ wasm-bindgen = "0.2"
 wasm-logger = "0.2"
 reqwasm = "0.5.0"
 web3 = { git = "https://github.com/monomadic/rust-web3", default-features = false, features = ["http-rustls-tls", "wasm", "eip-1193"] }
-yew-ethereum-provider = { git = "https://github.com/monomadic/yew-ethereum-provider" }
+#yew-ethereum-provider = { git = "https://github.com/monomadic/yew-ethereum-provider" }
 serde_json = "1.0.96"
-
+wasm-bindgen-futures = "0.4.36"
 [dependencies.web-sys]
 version = "0.3"
 features = [
@@ -43,7 +43,6 @@ features = [
   "HtmlCollection",
   "HtmlInputElement",
 ]
-
 [dev-dependencies]
 js-sys = "0.3"
 wasm-bindgen-futures = "0.4"

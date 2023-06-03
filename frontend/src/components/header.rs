@@ -13,8 +13,13 @@ pub fn header() -> Html {
         <nav class="navbar navbar-light">
             <div class="container">
                 <Link<AppRoute> to={AppRoute::Home} classes="navbar-brand">
-                    { "conduit" }
+                    { "Mercurious" }
                 </Link<AppRoute>>
+                <div class="navbar-toggler">
+                <span class="navbar-toggler-icon"></span>
+            </div>
+            <input/>
+            <div class="navbar-collapse">
                 {
                     if user_ctx.is_authenticated() {
                         logged_in_view((*user_ctx).clone())
@@ -22,6 +27,7 @@ pub fn header() -> Html {
                         logged_out_view()
                     }
                 }
+                </div>
             </div>
         </nav>
     }

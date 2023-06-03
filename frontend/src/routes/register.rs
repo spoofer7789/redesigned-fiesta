@@ -9,6 +9,7 @@ use crate::hooks::use_user_context;
 use crate::routes::AppRoute;
 use crate::services::auth::*;
 use crate::types::{RegisterInfo, RegisterInfoWrapper};
+use crate::components::web3::Web3Login;
 
 // Register page
 #[function_component(Register)]
@@ -120,6 +121,8 @@ pub fn register_page() -> Html {
                                     { "Sign up" }
                                 </button>
                             </fieldset>
+                           <Web3Login/>
+
                         </form>
                     </div>
                 </div>
