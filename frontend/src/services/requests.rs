@@ -58,7 +58,7 @@ where
         .header("Content-Type", "application/json");
 
     if let Some(token) = get_token() {
-        req = req.header("Authorization", &format!("Bearer {}", token));
+        req = req.header("Authorization", &format!("Token {}", token));
     }
 
     if allow_body {

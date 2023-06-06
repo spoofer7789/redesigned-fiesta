@@ -9,6 +9,13 @@ use crate::prelude::*;
 use crate::utils::{HASHER, PWD_SCHEME_VERSION};
 
 // message handler implementations ↓
+use libreauth::pass::Error as LibreAuthError;
+
+impl From<LibreAuthError> for Error {
+    fn from(_error: LibreAuthError) -> Self {
+        Error::InternalServerError
+    }
+}
 
 impl Message for RegisterUser {
     type Result = Result<UserResponse>;

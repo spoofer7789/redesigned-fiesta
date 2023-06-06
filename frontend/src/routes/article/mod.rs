@@ -55,16 +55,7 @@ pub fn article(props: &Props) -> Html {
                     <div class="row article-content">
                         <div class="col-xs-12">
                             { view_body(&article.body) }
-                            <ul class="tag-list">
-                                {for article.tag_list.iter().map(|tag| {
-                                    html! {
-                                        <li
-                                            class="tag-default tag-pill tag-outline">
-                                            { tag }
-                                        </li>
-                                    }
-                                })}
-                            </ul>
+                           
                         </div>
                     </div>
                     <hr />

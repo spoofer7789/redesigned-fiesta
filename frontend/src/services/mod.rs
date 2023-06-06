@@ -5,7 +5,7 @@ pub mod auth;
 pub mod comments;
 pub mod profiles;
 pub mod requests;
-pub mod tags;
+
 pub mod wallet_list;
 pub use requests::{
     get_token, limit, request_delete, request_get, request_post, request_put, set_token,

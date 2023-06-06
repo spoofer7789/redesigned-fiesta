@@ -12,7 +12,6 @@ use std::env;
 
 pub mod articles;
 pub mod profiles;
-pub mod tags;
 pub mod users;
 
 pub struct AppState {
@@ -107,7 +106,6 @@ fn routes(app: &mut web::ServiceConfig) {
                 web::resource("articles/{slug}/comments/{comment_id}")
                     .route(web::delete().to(articles::comments::delete)),
             )
-            // Tags routes ↓
-            .service(web::resource("tags").route(web::get().to(tags::get))),
+  
     );
 }

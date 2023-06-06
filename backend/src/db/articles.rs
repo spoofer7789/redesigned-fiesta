@@ -11,7 +11,7 @@ use crate::app::articles::{
 };
 use crate::app::profiles::ProfileResponseInner;
 use crate::models::{
-    Article, ArticleChange, ArticleTag, NewArticle, NewArticleTag, NewFavoriteArticle, User,
+    Article, ArticleChange,  NewArticle, NewFavoriteArticle, User,
 };
 use crate::prelude::*;
 use crate::utils::CustomDateTime;
@@ -32,8 +32,6 @@ impl Handler<CreateArticleOuter> for DbExecutor {
 
         let author = msg.auth.user;
 
-        // Generating the Uuid here since it will help make a unique slug
-        // This is for when some articles may have similar titles such that they generate the same slug
         let new_article_id = Uuid::new_v4();
         let slug = generate_slug(&new_article_id, &msg.article.title);
 
@@ -49,7 +47,6 @@ impl Handler<CreateArticleOuter> for DbExecutor {
             .values(&new_article)
             .get_result::<Article>(conn)?;
 
-        let _ = replace_tags(article.id, msg.article.tag_list, conn)?;
 
         get_article_response(article.slug, Some(article.author_id), conn)
     }
@@ -110,16 +107,6 @@ impl Handler<UpdateArticleOuter> for DbExecutor {
             .set(&article_change)
             .get_result::<Article>(conn)?;
 
-        let _ = match msg.article.tag_list {
-            Some(tags) => {
-                let inserted_tags = replace_tags(article.id, tags, conn)?;
-                inserted_tags
-                    .iter()
-                    .map(|article_tag| article_tag.tag_name.to_owned())
-                    .collect::<Vec<String>>()
-            }
-            None => select_tags_on_article(article.id, conn)?,
-        };
 
         get_article_response(article.slug, Some(article.author_id), conn)
     }
@@ -147,7 +134,6 @@ impl Handler<DeleteArticle> for DbExecutor {
             })));
         }
 
-        delete_tags(article.id, conn)?;
 
         delete_favorites(article.id, conn)?;
 
@@ -246,16 +232,6 @@ impl Handler<GetArticles> for DbExecutor {
             query = query.filter(articles::id.eq_any(favorite_article_ids));
         }
 
-        if let Some(ref tag) = msg.params.tag {
-            use crate::schema::article_tags;
-
-            let tagged_article_ids: Vec<Uuid> = article_tags::table
-                .filter(article_tags::tag_name.eq(tag))
-                .select(article_tags::article_id)
-                .load::<Uuid>(conn)?;
-
-            query = query.filter(articles::id.eq_any(tagged_article_ids));
-        }
 
         let limit = std::cmp::min(msg.params.limit.unwrap_or(20), 100) as i64;
         let offset = msg.params.offset.unwrap_or(0) as i64;
@@ -332,7 +308,6 @@ fn get_article_response(
 
     let favorites_count = get_favorites_count(article.id, conn)?;
 
-    let tags = select_tags_on_article(article.id, conn)?;
 
     Ok(ArticleResponse {
         article: ArticleResponseInner {
@@ -340,7 +315,6 @@ fn get_article_response(
             title: article.title,
             description: article.description,
             body: article.body,
-            tag_list: tags,
             created_at: CustomDateTime(article.created_at),
             updated_at: CustomDateTime(article.updated_at),
             favorited,
@@ -376,30 +350,6 @@ fn get_article_list_response(
     })
 }
 
-fn add_tag<T>(article_id: Uuid, tag_name: T, conn: &mut PooledConn) -> Result<ArticleTag>
-where
-    T: ToString,
-{
-    use crate::schema::article_tags;
-
-    diesel::insert_into(article_tags::table)
-        .values(NewArticleTag {
-            article_id,
-            tag_name: tag_name.to_string(),
-        })
-        .on_conflict((article_tags::article_id, article_tags::tag_name))
-        .do_nothing()
-        .get_result::<ArticleTag>(conn)
-        .map_err(Into::into)
-}
-
-fn delete_tags(article_id: Uuid, conn: &mut PooledConn) -> Result<()> {
-    use crate::schema::article_tags;
-
-    diesel::delete(article_tags::table.filter(article_tags::article_id.eq(article_id)))
-        .execute(conn)?;
-    Ok(())
-}
 
 fn delete_favorites(article_id: Uuid, conn: &mut PooledConn) -> Result<()> {
     use crate::schema::favorite_articles;
@@ -409,18 +359,6 @@ fn delete_favorites(article_id: Uuid, conn: &mut PooledConn) -> Result<()> {
     Ok(())
 }
 
-fn replace_tags<I>(article_id: Uuid, tags: I, conn: &mut PooledConn) -> Result<Vec<ArticleTag>>
-where
-    I: IntoIterator<Item = String>,
-{
-    delete_tags(article_id, conn)?;
-
-    // this may look confusing but collect can convert to this
-    // https://doc.rust-lang.org/std/iter/trait.Iterator.html#method.collect
-    tags.into_iter()
-        .map(|tag_name| add_tag(article_id, &tag_name.to_string(), conn))
-        .collect::<Result<Vec<ArticleTag>>>()
-}
 
 fn get_favorites_count(article_id: Uuid, conn: &mut PooledConn) -> Result<usize> {
     use crate::schema::favorite_articles;
@@ -463,13 +401,4 @@ fn get_favorited_and_following(
     Ok((favorite_id.is_some(), follow_id.is_some()))
 }
 
-fn select_tags_on_article(article_id: Uuid, conn: &mut PooledConn) -> Result<Vec<String>> {
-    use crate::schema::article_tags;
 
-    let tags = article_tags::table
-        .filter(article_tags::article_id.eq(article_id))
-        .select(article_tags::tag_name)
-        .load(conn)?;
-
-    Ok(tags)
-}

@@ -1,18 +1,14 @@
 use yew::prelude::*;
-
 use crate::components::article_list::{ArticleList, ArticleListFilter};
 use crate::hooks::use_user_context;
 
 #[derive(Properties, Clone, PartialEq, Eq)]
-pub struct Props {
-    pub tag: Option<String>,
-}
+pub struct Props {}
 
 #[derive(PartialEq, Eq, Clone)]
 pub enum Tab {
     All,
     Feed,
-    Tag,
 }
 
 /// Main content with tabs of article list for home page
@@ -36,36 +32,16 @@ pub fn main_view(props: &Props) -> Html {
     });
 
     {
-        let tab = tab.clone();
         let filter = filter.clone();
         use_effect_with_deps(
-            move |tag| {
-                if let Some(tag) = &tag {
-                    tab.set(Tab::Tag);
-                    filter.set(ArticleListFilter::ByTag(tag.clone()));
-                }
-                || ()
-            },
-            props.tag.clone(),
-        );
-    }
-
-    {
-        let filter = filter.clone();
-        use_effect_with_deps(
-            move |(tab, tag)| {
+            move |tab| {
                 match tab {
                     Tab::Feed => filter.set(ArticleListFilter::Feed),
                     Tab::All => filter.set(ArticleListFilter::All),
-                    Tab::Tag => {
-                        if let Some(tag) = tag {
-                            filter.set(ArticleListFilter::ByTag(tag.clone()));
-                        }
-                    }
                 }
                 || ()
             },
-            ((*tab).clone(), props.tag.clone()),
+            (*tab).clone(),
         );
     }
 
@@ -81,7 +57,6 @@ pub fn main_view(props: &Props) -> Html {
                         }
                     }
                     { global_feed_tab(tab.clone()) }
-                    { tag_filter_tab(tab.clone(), props) }
                 </ul>
             </div>
 
@@ -116,25 +91,6 @@ fn global_feed_tab(tab: UseStateHandle<Tab>) -> Html {
                 { "Global Feed" }
             </a>
         </li>
-    }
-}
-
-fn tag_filter_tab(tab: UseStateHandle<Tab>, props: &Props) -> Html {
-    if let Some(tag) = &props.tag {
-        let (onclick, class) = get_tab_msg_class(tab, Tab::Tag);
-
-        html! {
-            <li class="nav-item">
-                <a
-                    href=""
-                    {class}
-                    {onclick}>
-                    <i class="ion-pound"></i> { &tag }
-                </a>
-            </li>
-        }
-    } else {
-        html! {}
     }
 }
 

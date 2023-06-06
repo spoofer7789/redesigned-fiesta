@@ -90,15 +90,7 @@ pub fn article_preview(props: &Props) -> Html {
                     { "Read more..." }
                 </Link<AppRoute>>
             </span>
-            <ul class="tag-list">
-                {for article.tag_list.iter().map(|tag| {
-                    html! {
-                        <li class="tag-default tag-pill tag-outline" key={ (&tag).to_string() }>
-                            { &tag }
-                        </li>
-                    }
-                })}
-            </ul>
+          
         </div>
     }
 }

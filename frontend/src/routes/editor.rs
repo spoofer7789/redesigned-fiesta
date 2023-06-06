@@ -13,14 +13,13 @@ use crate::types::{ArticleCreateUpdateInfo, ArticleCreateUpdateInfoWrapper};
 pub struct Props {
     pub slug: Option<String>,
 }
-
-/// Create or update an article
+// Create or update an article
 #[function_component(Editor)]
 pub fn editor(props: &Props) -> Html {
     let navigator = use_navigator().unwrap();
     let error = use_state(|| None);
     let update_info = use_state(ArticleCreateUpdateInfo::default);
-    let tag_input = use_state(String::default);
+
     let article_get = {
         let slug = props.slug.clone();
         use_async(async move { get(slug.unwrap_or_default()).await })
@@ -63,7 +62,6 @@ pub fn editor(props: &Props) -> Html {
                         title: article_info.article.title.clone(),
                         description: article_info.article.description.clone(),
                         body: article_info.article.body.clone(),
-                        tag_list: Some(article_info.article.tag_list.clone()),
                     });
                     error.set(None);
                 }
@@ -131,41 +129,13 @@ pub fn editor(props: &Props) -> Html {
             update_info.set(info);
         })
     };
-    let oninput_tag = {
-        let tag_input = tag_input.clone();
-        Callback::from(move |e: InputEvent| {
-            let input: HtmlInputElement = e.target_unchecked_into();
-            tag_input.set(input.value());
-        })
-    };
+  
     let onkeypress = Callback::from(|e: KeyboardEvent| {
         // Prevent submit the form when press Enter
         if e.key() == "Enter" {
             e.prevent_default();
         }
     });
-    let onkeyup = {
-        let update_info = update_info.clone();
-        let tag_input = tag_input.clone();
-        Callback::from(move |e: KeyboardEvent| {
-            // Add a new tag when press Enter
-            if e.key() == "Enter" {
-                e.prevent_default();
-                // Add a new tag
-                let mut info = (*update_info).clone();
-                if let Some(tag_list) = &mut info.tag_list {
-                    if !tag_list.contains(&*tag_input) {
-                        tag_list.push((*tag_input).clone());
-                    }
-                } else {
-                    info.tag_list = Some(vec![(*tag_input).clone()]);
-                }
-                update_info.set(info);
-                // Clear tag input
-                tag_input.set(String::default());
-            }
-        })
-    };
 
     html! {
         <div class="editor-page">
@@ -201,44 +171,8 @@ pub fn editor(props: &Props) -> Html {
                                     </textarea>
                                 </fieldset>
                                 <fieldset class="form-group">
-                                    <input
-                                        class="form-control"
-                                        type="text"
-                                        placeholder="Enter tags"
-                                        value={(*tag_input).clone()}
-                                        oninput={oninput_tag}
-                                        {onkeypress}
-                                        {onkeyup} />
-                                    <div class="tag-list">
-                                        {
-                                            if let Some(tag_list) = &update_info.tag_list.clone() {
-                                                html! {for tag_list.iter().map(|tag| {
-                                                    let onclick_remove = {
-                                                        let tag = tag.clone();
-                                                        let update_info = update_info.clone();
-                                                        Callback::from(move |_| {
-                                                            // Remove a tag
-                                                            let mut info = (*update_info).clone();
-                                                            if let Some(tag_list) = &mut info.tag_list {
-                                                                tag_list.retain(|t| t != &tag);
-                                                            }
-                                                            update_info.set(info);
-                                                        })
-                                                    };
-                                                    html! {
-                                                        <span class="tag-default tag-pill">
-                                                            <i class="ion-close-round"
-                                                                onclick={onclick_remove}>
-                                                            </i>
-                                                            { &tag }
-                                                        </span>
-                                                    }
-                                                })}
-                                            } else {
-                                                html! {}
-                                            }
-                                        }
-                                    </div>
+                                  
+                                   
                                 </fieldset>
                                 <button
                                     class="btn btn-lg pull-xs-right btn-primary"

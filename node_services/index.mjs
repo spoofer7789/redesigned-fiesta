@@ -4,8 +4,14 @@ import fetch from 'node-fetch';
 
 import express from 'express';
 import bodyParser from 'body-parser';
+import { EventEmitter } from 'events'; 
+
+EventEmitter.defaultMaxListeners = 50;
+
+
 const app = express();
 const port = 3001;
+
 
 async function sendRequest(url, method, body) {
   const response = await fetch(url, {
@@ -34,7 +40,7 @@ async function main() {
   await contractsStore.load();
 
   // Usage examples
-  const serverUrl = 'http://localhost:3000';
+  const serverUrl = 'http://localhost:8080';
   await addUser(usersStore, serverUrl, 'username', 'signature', 'publicKey');
   await addContract(contractsStore, 'SolidityContractCode', { metadata: 'Some metadata' });
 
@@ -81,6 +87,7 @@ app.post('/web3login', async (req, res) => {
 
   res.sendStatus(200);
 });
+
 
 (async () => {
   const orbitDB = await main();

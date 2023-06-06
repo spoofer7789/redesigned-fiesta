@@ -10,7 +10,6 @@ pub struct ArticleInfo {
     pub title: String,
     pub description: String,
     pub body: String,
-    pub tag_list: Vec<String>,
     pub created_at: DateTime<Utc>,
     pub updated_at: DateTime<Utc>,
     pub favorited: bool,
@@ -37,7 +36,6 @@ pub struct ArticleCreateUpdateInfo {
     pub title: String,
     pub description: String,
     pub body: String,
-    pub tag_list: Option<Vec<String>>,
 }
 
 #[derive(Serialize, Deserialize, Clone, Debug)]

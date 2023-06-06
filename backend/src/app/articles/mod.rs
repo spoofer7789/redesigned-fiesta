@@ -24,7 +24,7 @@ pub struct ArticlePath {
 
 #[derive(Debug, Deserialize)]
 pub struct ArticlesParams {
-    pub tag: Option<String>,
+   // pub tag: Option<String>,
     pub author: Option<String>,
     pub favorited: Option<String>,
     pub limit: Option<usize>,  // <- if not set, is 20
@@ -48,8 +48,6 @@ pub struct CreateArticle {
     pub description: String,
     #[validate(length(min = 1, message = "fails validation - cannot be empty"))]
     pub body: String,
-    #[validate(length(min = 1, message = "fails validation - cannot be empty"))]
-    pub tag_list: Vec<String>,
 }
 
 #[derive(Debug)]
@@ -73,8 +71,6 @@ pub struct UpdateArticle {
     pub description: Option<String>,
     #[validate(length(min = 1, message = "fails validation - cannot be empty"))]
     pub body: Option<String>,
-    #[validate(length(min = 1, message = "fails validation - cannot be empty"))]
-    pub tag_list: Option<Vec<String>>,
 }
 
 #[derive(Debug)]
@@ -128,7 +124,6 @@ pub struct ArticleResponseInner {
     pub title: String,
     pub description: String,
     pub body: String,
-    pub tag_list: Vec<String>,
     pub created_at: CustomDateTime,
     pub updated_at: CustomDateTime,
     pub favorited: bool,
