@@ -11,6 +11,7 @@ pub struct User {
     pub password: String,
     pub bio: Option<String>,
     pub image: Option<String>,
+    pub zcash_wallet: Option<String>, // new field for the user's Zcash wallet
     pub created_at: NaiveDateTime,
     pub updated_at: NaiveDateTime,
 }
@@ -23,6 +24,7 @@ pub struct NewUser {
     pub password: String,
     pub bio: Option<String>,
     pub image: Option<String>,
+    pub zcash_wallet: Option<String>, // new field for the user's Zcash wallet
 }
 
 #[derive(Debug, AsChangeset)]

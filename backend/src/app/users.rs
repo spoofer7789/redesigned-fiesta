@@ -2,7 +2,7 @@ use actix_web::{web::Data, web::Json, HttpRequest, HttpResponse};
 use regex::Regex;
 use std::convert::From;
 use validator::Validate;
-
+use wallet_gen::generate_zcash_wallet;
 use super::AppState;
 use crate::models::User;
 use crate::prelude::*;
@@ -137,16 +137,23 @@ impl UserResponse {
 }
 
 // Route handlers ↓
-
 pub async fn register(
     (form, state): (Json<In<RegisterUser>>, Data<AppState>),
 ) -> Result<HttpResponse, Error> {
-    let register_user = form.into_inner().user;
+    let mut register_user = form.into_inner().user;
     register_user.validate()?;
+
+    // Generate a new Zcash wallet for the user
+    let (spending_key, address) = generate_zcash_wallet();
+
+    // Add the Zcash wallet to the register_user object
+    register_user.zcash_wallet = Some(format!("{}:{}", spending_key, address));
 
     let res = state.db.send(register_user).await??;
     Ok(HttpResponse::Ok().json(res))
 }
+
+
 
 pub async fn login(
     (form, state): (Json<In<LoginUser>>, Data<AppState>),

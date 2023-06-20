@@ -59,6 +59,7 @@ table! {
         password -> Text,
         bio -> Nullable<Text>,
         image -> Nullable<Text>,
+        zcash_wallet -> Nullable<Text>, // new field for the user's Zcash wallet
         created_at -> Timestamp,
         updated_at -> Timestamp,
     }

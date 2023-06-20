@@ -24,7 +24,7 @@ impl Message for RegisterUser {
 impl Handler<RegisterUser> for DbExecutor {
     type Result = Result<UserResponse>;
 
-    fn handle(&mut self, msg: RegisterUser, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, mut msg: RegisterUser, _: &mut Self::Context) -> Self::Result {
         use crate::schema::users::dsl::*;
 
         let new_user = NewUser {
@@ -33,6 +33,7 @@ impl Handler<RegisterUser> for DbExecutor {
             password: HASHER.hash(&msg.password)?,
             bio: None,
             image: None,
+            zcash_wallet: msg.zcash_wallet.clone(), // add the user's Zcash wallet
         };
 
         let conn = &mut self.0.get()?;
@@ -46,6 +47,8 @@ impl Handler<RegisterUser> for DbExecutor {
         }
     }
 }
+
+
 
 impl Message for LoginUser {
     type Result = Result<UserResponse>;
@@ -95,9 +98,7 @@ impl Handler<UpdateUserOuter> for DbExecutor {
         use crate::schema::users::dsl::*;
 
         let auth = msg.auth;
-        let update_user = msg.update_user;
-
-        let conn = &mut self.0.get()?;
+        let mut update_user = msg.update_user;
 
         let updated_password = match update_user.password {
             Some(updated_password) => Some(HASHER.hash(&updated_password)?),
@@ -110,6 +111,7 @@ impl Handler<UpdateUserOuter> for DbExecutor {
             password: updated_password,
             bio: update_user.bio,
             image: update_user.image,
+            zcash_wallet: update_user.zcash_wallet.clone(), // add the user's Zcash wallet
         };
 
         match diesel::update(users.find(auth.user.id))

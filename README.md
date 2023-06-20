@@ -1,11 +1,12 @@
 ##
 ##
- - [] setup and configure your templates together. 
+ - [x] setup and configure your templates together. 
     - [x]login create account
-    - [] articles to work.
+    - [x] articles to work.
  - [] re-add the code for wallets into the app.
-    - [] get the requests to work with node_services
+     - [] 
+     - [] generate wallets for users
+- [] get the requests to work with node_services
  - []
- - [] generate wallets for users 
  - [] oath2
  - []

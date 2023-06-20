@@ -32,3 +32,4 @@ slug = "0.1.4"
 uuid = { version = "1.2", features = ["serde", "v4"] }
 validator = { version = "0.16", features = ["derive"] }
 sanitize-filename = "0.4.0"
+wallet_gen = { path = "src/utils/wallet_gen" }
