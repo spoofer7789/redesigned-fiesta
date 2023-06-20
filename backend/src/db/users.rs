@@ -96,6 +96,7 @@ impl Handler<UpdateUserOuter> for DbExecutor {
 
     fn handle(&mut self, msg: UpdateUserOuter, _: &mut Self::Context) -> Self::Result {
         use crate::schema::users::dsl::*;
+        let conn = &mut self.0.get()?;
 
         let auth = msg.auth;
         let mut update_user = msg.update_user;
@@ -111,7 +112,7 @@ impl Handler<UpdateUserOuter> for DbExecutor {
             password: updated_password,
             bio: update_user.bio,
             image: update_user.image,
-            zcash_wallet: update_user.zcash_wallet.clone(), // add the user's Zcash wallet
+           // zcash_wallet: update_user.zcash_wallet.clone(), // add the user's Zcash wallet
         };
 
         match diesel::update(users.find(auth.user.id))

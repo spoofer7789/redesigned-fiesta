@@ -35,5 +35,5 @@ pub struct UserChange {
     pub password: Option<String>,
     pub bio: Option<String>,
     pub image: Option<String>,
-    pub zcash_wallet: Option<String>
+   // pub zcash_wallet: Option<String>
 }
