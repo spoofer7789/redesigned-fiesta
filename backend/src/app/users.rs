@@ -44,6 +44,7 @@ pub struct RegisterUser {
         message = "fails validation - must be 8-72 characters long"
     ))]
     pub password: String,
+    pub zcash_wallet: Option<String>,
 }
 
 #[derive(Debug, Validate, Deserialize)]
