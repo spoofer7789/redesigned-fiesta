@@ -1,4 +1,5 @@
 use orchard::keys::{SpendingKey, FullViewingKey, Scope};
+use orchard::builder::Builder;
 use rand::Rng;
 
 pub fn generate_zcash_wallet() -> (String, String) {
@@ -22,4 +23,9 @@ pub fn generate_extra_addresses(sk: SpendingKey, num_addresses: u32) -> Vec<Stri
         addresses.push(format!("{:?}", address));
     }
     addresses
+}
+
+//walk me through building this function.
+pub fn sign_transaction(sk: SpendingKey, ) {
+
 }
