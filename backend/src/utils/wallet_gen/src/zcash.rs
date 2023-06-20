@@ -1,6 +1,10 @@
-use orchard::keys::{SpendingKey, FullViewingKey, Scope};
-use orchard::builder::Builder;
+use orchard::value::NoteValue;
+use orchard::Address;
+use orchard::keys::{SpendingKey, FullViewingKey, Scope, OutgoingViewingKey};
+use orchard::builder::{Builder, OutputError};
 use rand::Rng;
+use zcash_primitives::transaction::components::amount;
+use zcash_primitives::transaction::components::amount::Amount;
 
 pub fn generate_zcash_wallet() -> (String, String) {
     let mut rng = rand::thread_rng();
@@ -14,18 +18,32 @@ pub fn generate_zcash_wallet() -> (String, String) {
 
     (format!("{:?}", sk), format!("{:?}", address))
 }
+pub fn sign_transaction(
+    sk: SpendingKey, 
+    recipient: Address, 
+    value: Amount, 
+    memo: Option<String>
+) -> Result<(), OutputError> {
+    // Convert the SpendingKey to a FullViewingKey
+    let fvk = FullViewingKey::from(&sk);
 
-pub fn generate_extra_addresses(sk: SpendingKey, num_addresses: u32) -> Vec<String> {
-    let full_viewing_key = FullViewingKey::from(&sk);
-    let mut addresses = Vec::new();
-    for i in 0..num_addresses {
-        let address = full_viewing_key.address_at(i, Scope::External);
-        addresses.push(format!("{:?}", address));
-    }
-    addresses
-}
+    // Get the OutgoingViewingKey from the FullViewingKey
+    let ovk = Some(fvk.ovk());
 
-//walk me through building this function.
-pub fn sign_transaction(sk: SpendingKey, ) {
+    // Create a new Builder
+    // You'll need to provide appropriate values for the Flags and Anchor
+    let mut builder = Builder::new(/* Flags */, /* Anchor */);
 
+    // Convert the Amount to a NoteValue
+    let note_value = NoteValue::from(value);
+
+    // Convert the memo to a [u8; 512]
+    let memo_bytes = memo.map(|s| {
+        let mut bytes = [0u8; 512];
+        bytes.copy_from_slice(s.as_bytes());
+        bytes
+    });
+
+    // Add the recipient to the transaction
+    builder.add_recipient(ovk, recipient, note_value, memo_bytes)
 }
