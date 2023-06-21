@@ -71,7 +71,7 @@ pub fn login_page() -> Html {
                             <Link<AppRoute> to={AppRoute::Register}>
                                 { "Need an account?" }
                             </Link<AppRoute>>
-                  //      <Web3Login/>
+                        <Web3Login/>
                             
                         </p>
                         <ListErrors error={user_login.error.clone()} />

@@ -10,7 +10,6 @@ pub mod settings;
 pub mod testing;
 use yew::prelude::*;
 use yew_router::prelude::*;
-
 use article::Article;
 use editor::Editor;
 use home::Home;
@@ -19,6 +18,7 @@ use profile::{Profile, ProfileTab};
 use register::Register;
 use settings::Settings;
 use testing::Testpage;
+
 /// App routes
 #[derive(Routable, Debug, Clone, PartialEq, Eq)]
 pub enum AppRoute {
@@ -56,7 +56,7 @@ pub fn switch(route: AppRoute) -> Html {
         AppRoute::EditorCreate => html! {<Editor />},
         AppRoute::Article { slug } => html! {<Article slug={slug} />},
         AppRoute::Settings => html! {<Settings />},
-
+        
         AppRoute::ProfileFavorites { username } => html! {
             <Profile username={username} tab={ProfileTab::FavoritedBy} />
         },

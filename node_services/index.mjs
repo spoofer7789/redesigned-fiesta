@@ -12,7 +12,7 @@ EventEmitter.defaultMaxListeners = 50;
 const app = express();
 const port = 3001;
 
-
+app.use(bodyParser.json());
 async function sendRequest(url, method, body) {
   const response = await fetch(url, {
     method: method,
@@ -79,8 +79,21 @@ async function addContract(store, contractCode, metadata) {
 }
 
 app.post('/web3login', async (req, res) => {
-  const { address, signature } = req.body;
-  // Here, you can handle the web3 login data with OrbitDB
+  const { address, signature, message } = req.body;
+
+  // Verify the signature
+  const messageBuffer = toBuffer(message);
+  const signatureBuffer = toBuffer(signature);
+  const { v, r, s } = ecsign(messageBuffer, signatureBuffer);
+
+  const recoveredAddress = `0x${pubToAddress({ v, r, s }).toString('hex')}`;
+
+  if (recoveredAddress.toLowerCase() !== address.toLowerCase()) {
+    res.status(401).send('Invalid signature');
+    return;
+  }
+
+  // If the signature is valid, handle the login
   // For example:
   const result = await addUser(orbitDB.usersStore, address, signature, address);
   console.log(result);
