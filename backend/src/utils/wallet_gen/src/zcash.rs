@@ -24,27 +24,28 @@ pub fn generate_zcash_wallet() -> (String, String) {
 
     (format!("{:?}", sk), format!("{:?}", address))
 }
-// pub fn sign_transaction(sk: SpendingKey, recipient: Address, value: Amount,memo: Option<String>) -> Result<(), OutputError> {
-//     // Convert the SpendingKey to a FullViewingKey
-//     let fvk = FullViewingKey::from(&sk);
-//     // Get the OutgoingViewingKey from the FullViewingKey
-//     let ovk = Some(fvk.to_ovk(Scope::External));
+
+pub fn sign_transaction(sk: SpendingKey, recipient: Address, value: Amount,memo: Option<String>) -> Result<(), OutputError> {
+    // Convert the SpendingKey to a FullViewingKey
+    let fvk = FullViewingKey::from(&sk);
+    // Get the OutgoingViewingKey from the FullViewingKey
+    let ovk = Some(fvk.to_ovk(Scope::External));
  
-//     let spends_enabled = true;
-//     let outputs_enabled = true;
-//     // Compute the anchor
-//     let anchor = Anchor::from.clone().MerkleHashOrchard;
+    let spends_enabled = true;
+    let outputs_enabled = true;
+    // Compute the anchor
+    let anchor = Anchor::from.clone().MerkleHashOrchard;
     
-//     let mut builder =
-//         orchard::builder::Builder::new(Flags::from_parts(spends_enabled, outputs_enabled,), anchor);
-//     // Convert the Amount to a NoteValue
-//     let note_value = NoteValue::default;
-//     // Convert the memo to a [u8; 512]
-//     let memo_bytes = memo.map(|s| {
-//         let mut bytes = [0u8; 512];
-//         bytes.copy_from_slice(s.as_bytes());
-//         bytes
-//     });
-//     // Add the recipient to the transaction
-//     builder.add_recipient(ovk, recipient, note_value(), memo_bytes)
-// }
+    let mut builder =
+        orchard::builder::Builder::new(Flags::from_parts(spends_enabled, outputs_enabled,), anchor);
+    // Convert the Amount to a NoteValue
+    let note_value = NoteValue::default;
+    // Convert the memo to a [u8; 512]
+    let memo_bytes = memo.map(|s| {
+        let mut bytes = [0u8; 512];
+        bytes.copy_from_slice(s.as_bytes());
+        bytes
+    });
+    // Add the recipient to the transaction
+    builder.add_recipient(ovk, recipient, note_value(), memo_bytes)
+}

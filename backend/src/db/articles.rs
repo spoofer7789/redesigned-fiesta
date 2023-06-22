@@ -400,5 +400,3 @@ fn get_favorited_and_following(
 
     Ok((favorite_id.is_some(), follow_id.is_some()))
 }
-
-

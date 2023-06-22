@@ -1,5 +1,6 @@
 ##
 ##
+- [] Switch the Database over to orbitdb.
 - [x] setup and configure your templates together. 
     - [x]login create account
     - [x] articles to work.
@@ -21,3 +22,5 @@
  - [] convert it into a DApp.
  - [] oath2
  - []
+- [] Create an icon for the App.
+    - []

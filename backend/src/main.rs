@@ -19,7 +19,6 @@ mod models;
 mod prelude;
 mod schema;
 mod utils;
-
 use std::env;
 
 fn main() {
